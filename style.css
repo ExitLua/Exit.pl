@@ -1,0 +1,495 @@
+@font-face {
+    font-family: 'czcionka'; /* Tak będziesz się do niej odwoływać */
+    src: url('czcionka.ttf') format('truetype'); /* Nazwa pliku musi być identyczna! */
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ccc'; /* Dowolna nazwa, której będziesz używać */
+    src: url('ccc.ttf') format('truetype'); /* Musi być identyczna z nazwą pliku na dysku */
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'aa'; /* Tak będziesz się do niej odwoływać */
+    src: url('aa.ttf') format('truetype'); /* Nazwa pliku musi być identyczna! */
+    font-weight: bold;
+    font-style: normal;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    /* overflow: hidden; // Usuń komentarz, jeśli nie chcesz przewijania */
+    background-color: #000;
+}
+
+/* VIDEO TŁO */
+#bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+}
+
+/* PROFILOWE */
+.avatar {
+    position: absolute;
+    top: 40%; /* Wyśrodkowałem idealnie, zmień na 40% jeśli wolisz wyżej */
+    left: 40%;
+    transform: translate(-50%, -50%);
+    
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+
+    /* Grubsza, wyraźna biała ramka */
+    border: 1px solid rgba(255, 255, 255, 1);
+
+    /* Mocny, szeroki biały shadow (widoczny od razu) */
+    box-shadow: 
+        0 0 30px 5px rgba(255, 255, 255, 0.4),  /* Intensywna aura przy ramce */
+        0 0 70px 15px rgba(255, 255, 255, 0.2), /* Szeroki zasięg światła */
+        inset 0 0 20px rgba(255, 255, 255, 0.3); /* Rozświetlenie krawędzi foto */
+
+    /* Płynne przejście efektów */
+    transition: all 0.4s ease-in-out;
+
+    opacity: 0; 
+    transition: all 0.4s ease-in-out, opacity 2s ease;
+}
+
+/* EFEKT PO NAJECHANIU (Biały glow staje się gigantyczny) */
+.avatar:hover {
+    transform: translate(-50%, -50%) scale(1.05); /* Lekkie powiększenie */
+    
+    /* Potężny biały blask */
+    box-shadow: 
+        0 0 50px 10px rgba(255, 255, 255, 0.6),  /* Mocniejszy środek */
+        0 0 120px 30px rgba(255, 255, 255, 0.3), /* Bardzo daleki zasięg */
+        inset 0 0 25px rgba(255, 255, 255, 0.5);
+    
+    filter: brightness(1.1); /* Delikatne rozjaśnienie samej fotki */
+}
+
+/* ========================== L1stwa (POŁĄCZONE) ========================== */
+
+/* 1. KONTENER - To on decyduje, gdzie jest cały tekst względem zdjęcia */
+.nickname-container {
+    position: absolute;
+    top: 42%;
+    left: 45%; /* Zwiększyłem z 45% na 48%, żeby tekst nie nachodził na blask avatara */
+    transform: translateY(-50%);
+    
+    display: flex;
+    flex-direction: column; /* Układa nick nad linkiem */
+    align-items: flex-start; /* Wyrównuje tekst do lewej */
+    z-index: 10;
+}
+
+/* 2. NICKNAME - Usunąłem stąd position, top, left i transform! */
+.nickname {
+    font-family: 'czcionka', sans-serif; 
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    margin: 0; /* Ważne, żeby nie przesuwało linku za daleko */
+    line-height: 1; /* Zmniejsza odstęp pionowy, żeby link był bliżej */
+    
+    text-shadow: 
+        0 0 15px rgba(255, 255, 255, 0.6),
+        0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+/* 3. LINK DISCORD */
+.discord-link {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 10px; /* Delikatny odstęp pod dużym napisem */
+    
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    animation: fade-loop 4s infinite ease-in-out;
+    transition: color 0.3s ease;
+}
+
+.discord-link:hover {
+    color: white;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+/* Kursor tekstowy */
+.nickname::after {
+    content: '|';
+    animation: blink 0.7s infinite;
+    margin-left: 5px;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes fade-loop {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.8; }
+}
+
+/* ===================================== MENU MUZYKI ======================================= */
+/* MENU MUZYKI Z BLASKIEM */
+/* ===================================== MENU MUZYKI (POPRAWIONE) ======================================= */
+.music-player {
+    position: absolute;
+    top: 100px; /* dystans pod górnym boxem */
+    right: 25px;
+    left: auto;
+    transform: none;
+    
+    padding: 10px 15px; /* Minimalne pady, żeby pasowało do układu poziomego */
+    background: rgba(0, 0, 0, 0.24); /* Zachowujemy ciemne tło */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 1); /* Ta sama świecąca ramka */
+    box-shadow: 
+        0 0 15px 1px rgba(255, 255, 255, 0.3), 
+        0 0 30px 3px rgba(255, 255, 255, 0.1);
+    
+    display: flex;
+    flex-direction: row; /* Układ poziomy! */
+    align-items: center; /* Wyśrodkowanie w pionie */
+    gap: 15px; /* Odstęp między przyciskiem a suwakiem */
+    z-index: 20;
+}
+
+/* KONTENER KONTROLEK - musimy go zaktualizować */
+.player-controls {
+    display: flex;
+    flex-direction: row; /* Zmienione na rządek! */
+    align-items: center;
+    gap: 15px;
+}
+
+/* NOWY STYL DLA PRZYCISKU (SAM BIAŁY TEKST) */
+/* NOWY STYL DLA PRZYCISKU (BIAŁY TEKST ZE STAŁĄ SZEROKOŚCIĄ) */
+.player-btn {
+    background: none;
+    border: none;
+    color: white;
+    padding: 0;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem; /* Możesz dać 0.9rem jeśli napisy są za duże */
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+
+    /* --- KLUCZOWE ZMIANY TUTAJ --- */
+    width: 60px;      /* Stała szerokość – dostosuj, jeśli napisy wystają */
+    text-align: left; /* Tekst będzie zawsze zaczynał się w tym samym miejscu */
+    display: block;   /* Zapewnia, że szerokość width zadziała poprawnie */
+}
+
+.player-btn:hover {
+    color: white;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+/* SUWAK GŁOŚNOŚCI - BEZ ZMIAN */
+.volume-slider {
+    -webkit-appearance: none;
+    width: 100px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px white;
+}
+
+.extra-text {
+    font-family: 'ccc', sans-serif;
+    font-size: 1.2rem; /* Dopasuj wielkość według uznania */
+    color: white;
+    margin-top: 20px; /* Odstęp od linku Discord */
+    letter-spacing: 2px;
+    text-transform: uppercase; /* Jeśli chcesz same duże litery */
+    
+    /* Delikatny blask, żeby pasował do nicku */
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.5),
+        0 0 20px rgba(255, 255, 255, 0.2);
+        
+    opacity: 0.8; /* Lekka przezroczystość dla klimatu */
+}
+
+/* ============ kursor ================= */
+
+/* 1. CAŁA STRONA I WSZYSTKIE ELEMENTY */
+html, body, * {
+    cursor: url('star.png') 16 16, auto !important;
+}
+
+/* 2. ELEMENTY INTERAKTYWNE (Linki, przyciski, obrazki) */
+a, button, img, .avatar, .discord-link, .player-btn {
+    cursor: url('star.png') 16 16, pointer !important;
+}
+
+/* 3. SPECJALNY ATAK NA SUWAK (Input Range) */
+/* Sam kontener suwaka */
+input[type="range"].volume-slider {
+    cursor: url('star.png') 16 16, auto !important;
+}
+
+/* Kółko suwaka (Chrome, Edge, Safari) */
+input[type="range"].volume-slider::-webkit-slider-thumb {
+    cursor: url('star.png') 16 16, auto !important;
+    -webkit-appearance: none; /* Wymusza własne stylowanie */
+}
+
+/* Linia suwaka (Chrome, Edge, Safari) */
+input[type="range"].volume-slider::-webkit-slider-runnable-track {
+    cursor: url('star.png') 16 16, auto !important;
+}
+
+/* Kółko suwaka (Firefox) */
+input[type="range"].volume-slider::-moz-range-thumb {
+    cursor: url('star.png') 16 16, auto !important;
+}
+
+/* Linia suwaka (Firefox) */
+input[type="range"].volume-slider::-moz-range-track {
+    cursor: url('star.png') 16 16, auto !important;
+}
+
+/* Blokada zmiany kursora na tekstowy przy napisie */
+h1, p, span, #typewriter {
+    cursor: url('star.png') 16 16, auto !important;
+}
+
+/* ===================================== RAMKA INFO ======================================= */
+.info-box {
+    position: absolute;
+    top: 55%; 
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centrowanie */
+
+    width: 300px;
+    height: auto;
+    padding: 15px 25px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    
+    background: rgba(0, 0, 0, 0.24);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 1);
+    box-shadow: 
+        0 0 15px 1px rgba(255, 255, 255, 0.3), 
+        0 0 30px 3px rgba(255, 255, 255, 0.1);
+    
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    z-index: 10;
+}
+
+/* EFEKT PRZYBLIŻENIA PO NAJECHANIU */
+.info-box:hover {
+    /* Musi być translate + scale, żeby nie stracić środka! */
+    transform: translate(-50%, -50%) scale(1.05);
+    
+    box-shadow: 
+        0 0 25px 2px rgba(255, 255, 255, 0.4), 
+        0 0 50px 5px rgba(255, 255, 255, 0.2);
+    
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* RESZTA STYLI BEZ ZMIAN (info-avatar, info-title itd.) */
+.info-avatar {
+    width: 60px;       
+    height: 60px;
+    border-radius: 20%;
+    border: 1px solid white;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.info-text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.info-title {
+    font-family: 'aa', sans-serif;
+    color: white;
+    font-weight: 800;
+    font-size: 0.9rem;
+    margin: 0; /* WYEROWANE */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.info-desc {
+    font-family: 'ccc', sans-serif;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    margin: 0; /* WYEROWANE */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.932); /* Ciemne tło */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Musi być na samym wierzchu */
+    transition: opacity 1s ease, visibility 1s;
+    cursor: url('star.png') 16 16, auto !important;
+}
+
+.click-text {
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    font-size: 1.5rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    animation: pulse-glow 2s infinite ease-in-out;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes pulse-glow {
+    0%, 100% { opacity: 0.3; transform: scale(0.95); }
+    50% { opacity: 1; transform: scale(1); text-shadow: 0 0 20px white; }
+}
+
+/* Klasa, którą dodamy przez JS, żeby ukryć ekran */
+.overlay-hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* ===================================== RAMKA MUZYKI (PRAWY GÓRNY) ======================================= */
+/* ===================================== RAMKA MUZYKI (PRAWY GÓRNY) ======================================= */
+.music-info-box {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    
+    width: 280px; /* Nieco szersza, żeby lepiej mieściła tekst */
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    border: 1px solid rgba(255, 255, 255, 1); 
+    border-radius: 12px;
+    
+    box-shadow: 
+        0 0 15px rgba(255, 255, 255, 0.3),
+        inset 0 0 10px rgba(255, 255, 255, 0.1);
+
+    transform-origin: right top; 
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    z-index: 100;
+}
+
+.music-info-box:hover {
+    transform: scale(1.15);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 
+        -15px 15px 35px rgba(0, 0, 0, 0.6), 
+        0 0 25px rgba(255, 255, 255, 0.4);
+}
+
+.album-art {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    border: 1px solid white;
+    object-fit: cover;
+    flex-shrink: 0; /* Blokuje zgniatanie zdjęcia */
+}
+
+/* KONTENER DANYCH MUZYCZNYCH */
+.music-details {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Odcina tekst wychodzący poza ramkę */
+    width: 100%;
+}
+
+.track-name-container {
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+    /* Gradient maskujący na brzegach */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.track-name {
+    font-family: 'aa', sans-serif;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    display: inline-block;
+    padding-right: 50px; /* Odstęp przed powtórzeniem tekstu */
+    
+    animation: marquee 10s linear infinite; 
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.track-artist {
+    font-family: 'ccc', sans-serif; /* Dodana Twoja czcionka */
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    margin: 2px 0 0 0; /* Mały margines od góry */
+    letter-spacing: 1px;
+}
+
+/* POPRAWIONA ANIMACJA (Płynna pętla) */
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } 
+}
+
+/* Opcjonalnie: jeśli tekst jest krótki, możesz usunąć animację, 
+   ale 10s linear infinite sprawi, że będzie płynnie "pływać" */
